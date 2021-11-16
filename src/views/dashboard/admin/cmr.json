@@ -1,0 +1,22 @@
+{
+  "cemeras": [
+    {
+      "image": {
+        "src": "http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_1.jpg_boxed_image.png",
+        "createdAt": "xx"
+      },
+      "cemeraid": "xxx",
+      "name": "监控点1-1号监控"
+    },
+    {
+      "image": {
+        "src": "http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_3.jpg_boxed_image.png",
+        "createdAt": "xx"
+      },
+      "cemeraid": "xxx",
+      "name": "监控点1-2号监控"
+    }
+  ],
+  "id": "监控点1",
+  "idx": 0
+}
