@@ -13,6 +13,9 @@ module.exports = {
 
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
+  "globals": {
+    "$": true  //xxxx -> 报错的变量
+  },
   rules: {
     "vue/max-attributes-per-line": [2, {
       "singleline": 10,

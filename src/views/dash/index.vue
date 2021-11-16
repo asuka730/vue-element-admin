@@ -18,7 +18,26 @@ export default {
     return {
       fetching: false
     }
+  },
+  created() {
+    this.getcourselist()
+  },
+  methods: {
+    getcourselist: function() {
+      $.ajax({
+        url: '/api/api/get_predict_list',
+        type: 'GET',
+        data: {
+          scenic_id: 1
+        },
+        async: false,
+        success: function(data) {
+          console.log(data)
+        }
+      })
+    }
   }
+
 }
 </script>
 
