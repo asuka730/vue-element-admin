@@ -68,6 +68,16 @@ export const constantRoutes = [{
   hidden: true
 },
 {
+  path: '/dash/ass',
+  component: () => import('@/views/association/index'),
+  name: 'Association',
+  meta: {
+    title: 'association',
+    noCache: true
+  },
+  hidden: true
+},
+{
   path: '/dash/gov',
   component: () => import('@/views/gov/index'),
   name: 'Gov',
