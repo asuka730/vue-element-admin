@@ -38,7 +38,7 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://121.37.92.93:8000', // 要请求的地址
+        target: 'http://127.0.0.1:8000', // 要请求的地址
         ws: true,
         changeOrigin: true,
         pathRewrite: {

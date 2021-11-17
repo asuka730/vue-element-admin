@@ -50,7 +50,7 @@ export default {
     return {}
   },
   mounted() {
-    this.testFetch()
+    // this.testFetch()
   },
   methods: {
     testFetch() {
