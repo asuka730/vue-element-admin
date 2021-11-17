@@ -33,16 +33,19 @@ export default {
             value: 80
           }
         ],
-        rowNum: 5
+        rowNum: 6,
+        waitTime: 3000
       }
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #ranking-board {
-  width: 25%;
+  height: 80%;
+  margin-top: 20%;
+  width: 100%;
   box-shadow: 0 0 3px blue;
   display: flex;
   flex-direction: column;

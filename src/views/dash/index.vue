@@ -20,8 +20,8 @@ export default {
     }
   },
   created() {
-    this.get1()
-    this.post1()
+    // this.get1()
+    // this.post1()
   },
   methods: {
     get1: function() {

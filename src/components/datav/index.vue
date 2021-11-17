@@ -1,22 +1,22 @@
 <template>
   <div id="data-view">
     <dv-full-screen-container>
-      <top-header />
-
+      <div class="main-head">
+        <top-header />
+      </div>
       <div class="main-content">
-        <digital-flop />
-        <div class="block-left-right-content">
+        <div class="left">
           <ranking-board />
-          <div class="block-top-bottom-content">
-            <div class="block-top-content">
-              <mapGaode />
-              <!-- <rose-chart /> -->
-              <!-- <water-level-chart /> -->
-              <!-- <scroll-board /> -->
-            </div>
-            <!-- <cards /> -->
+        </div>
+        <div class="center">
+          <div class="center-top">
+            <digital-flop />
+          </div>
+          <div class="">
+            <mapGaode />
           </div>
         </div>
+        <div class="right"><rightDetail /></div>
       </div>
     </dv-full-screen-container>
   </div>
@@ -27,12 +27,7 @@ import topHeader from './topHeader'
 import digitalFlop from './digitalFlop'
 import rankingBoard from './rankingBoard'
 import mapGaode from './mapGaode'
-import fetchJsonp from 'fetch-jsonp'
-
-// import roseChart from './roseChart'
-// import waterLevelChart from './waterLevelChart'
-// import scrollBoard from './scrollBoard'
-// import cards from './cards'
+import rightDetail from './rightDetail.vue'
 
 export default {
   name: 'DataView',
@@ -40,73 +35,51 @@ export default {
     topHeader,
     digitalFlop,
     rankingBoard,
-    mapGaode
-    // roseChart,
-    // waterLevelChart,
-    // scrollBoard,
-    // cards
+    mapGaode,
+    rightDetail
   },
   data() {
     return {}
   },
-  mounted() {
-    // this.testFetch()
-  },
-  methods: {
-    testFetch() {
-      fetchJsonp('http://121.37.92.93:8000/api/get_camera_list')
-        .then((res) => {
-          return res.json()
-        })
-        .then((res) => {
-          alert(res)
-        })
-    }
-  }
+  mounted() {},
+  methods: {}
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #data-view {
   width: 100%;
   height: 100%;
   background-color: #030409;
   color: #fff;
-
   #dv-full-screen-container {
-    background-image: url("./img/bg.png");
+    background-image: url("../img/bg.png");
     background-size: 100% 100%;
     box-shadow: 0 0 3px blue;
     display: flex;
     flex-direction: column;
-  }
-
-  .main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .block-left-right-content {
-    flex: 1;
-    display: flex;
-    margin-top: 20px;
-  }
-
-  .block-top-bottom-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    padding-left: 20px;
-  }
-
-  .block-top-content {
-    height: 55%;
-    display: flex;
-    flex-grow: 0;
-    box-sizing: border-box;
-    padding-bottom: 20px;
+    .main-head {
+    }
+    .main-content {
+      height: calc(100% - 100px);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .left,
+      .right {
+        width: 24%;
+      }
+      .center {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+      }
+      .left {
+        /* flex: 1; */
+        display: flex;
+        /* flex-direction: column; */
+      }
+    }
   }
 }
 </style>

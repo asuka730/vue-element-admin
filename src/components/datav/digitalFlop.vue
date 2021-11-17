@@ -88,17 +88,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #digital-flop {
   position: relative;
-  height: 10%;
+  height: 100%;
   flex-shrink: 0;
   display: flex;
-  width: 50%;
-  left: 50%;
-  top:0;
-  transform: translateX(-50%);
-  justify-content: space-between;
+  width: 100%;
   align-items: center;
   background-color: rgba(6, 30, 93, 0.5);
   .dv-decoration-10 {
