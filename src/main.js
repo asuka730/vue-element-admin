@@ -20,6 +20,7 @@ import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
 import * as echarts from 'echarts'
+import BaiduMap from 'vue-baidu-map';
 
 import * as filters from './filters' // global filters
 import $ from 'jquery'
@@ -41,6 +42,10 @@ if (process.env.NODE_ENV === 'production') {
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   locale: enLang // 如果使用中文，无需设置，请删除
+})
+
+Vue.use(BaiduMap, {
+  ak: '0fAFiU3jZlGqwPwpc19z0ul1KZG5bQ61'
 })
 
 // register global utility filters
