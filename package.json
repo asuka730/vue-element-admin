@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@antv/g2": "^4.1.34",
+    "@antv/g6": "^4.4.1",
     "@antv/l7": "^2.5.45",
     "@antv/l7-maps": "^2.5.45",
     "@jiaminghi/c-render": "^0.4.3",

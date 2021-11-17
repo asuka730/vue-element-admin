@@ -37,17 +37,16 @@ export default {
       const { randomExtend } = this
       this.digitalFlopData = [
         {
-          title: '景区入园数',
+          title: '上海A级景区总数',
           number: {
-            number: [randomExtend(20000, 30000)],
+            number: [98],
             content: '{nt}',
-            textAlign: 'left',
+            textAlign: 'center',
             style: {
               fill: '#4d99fc',
               fontWeight: 'bold'
             }
-          },
-          unit: '人'
+          }
         },
         {
           title: '景区容纳占比',

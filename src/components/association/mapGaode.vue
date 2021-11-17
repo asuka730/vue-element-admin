@@ -8,7 +8,7 @@
 import fetchJsonp from 'fetch-jsonp'
 import { Scene, Marker } from '@antv/l7'
 import { GaodeMap } from '@antv/l7-maps'
-import * as G2 from '@antv/g2'
+import G6 from '@antv/g6'
 
 export default {
   name: 'MapGaode',
@@ -17,24 +17,41 @@ export default {
       scene: null,
       pointsData: {
         nodes: [
-          {
-            people: {
-              current: 208995,
-              max: 3326504
-            },
-            name: '监控点1',
-            coordinates: [121.4878892450119, 31.245320671055552],
-            id: 'point 1'
-          },
-          {
-            people: {
-              current: 3108995,
-              max: 3326504
-            },
-            name: '监控点2',
-            coordinates: [121.5178892450119, 31.265320671055552],
-            id: 'point 2'
-          }
+          { id: 'node0', size: 50 },
+          { id: 'node1', size: 30 },
+          { id: 'node2', size: 30 },
+          { id: 'node3', size: 30 },
+          { id: 'node4', size: 80, isLeaf: true },
+          { id: 'node5', size: 30, isLeaf: true },
+          { id: 'node6', size: 15, isLeaf: true },
+          { id: 'node7', size: 15, isLeaf: true },
+          { id: 'node8', size: 15, isLeaf: true },
+          { id: 'node9', size: 15, isLeaf: true },
+          { id: 'node10', size: 15, isLeaf: true },
+          { id: 'node11', size: 15, isLeaf: true },
+          { id: 'node12', size: 15, isLeaf: true },
+          { id: 'node13', size: 15, isLeaf: true },
+          { id: 'node14', size: 15, isLeaf: true },
+          { id: 'node15', size: 15, isLeaf: true },
+          { id: 'node16', size: 15, isLeaf: true }
+        ],
+        edges: [
+          { source: 'node0', target: 'node1' },
+          { source: 'node0', target: 'node2' },
+          { source: 'node0', target: 'node3' },
+          { source: 'node0', target: 'node4' },
+          { source: 'node0', target: 'node5' },
+          { source: 'node1', target: 'node6' },
+          { source: 'node1', target: 'node7' },
+          { source: 'node2', target: 'node8' },
+          { source: 'node2', target: 'node9' },
+          { source: 'node2', target: 'node10' },
+          { source: 'node2', target: 'node11' },
+          { source: 'node2', target: 'node12' },
+          { source: 'node2', target: 'node13' },
+          { source: 'node3', target: 'node14' },
+          { source: 'node3', target: 'node15' },
+          { source: 'node3', target: 'node16' }
         ]
       }
     }
@@ -95,13 +112,39 @@ export default {
           return
         }
         const itemData = _this.getItemData(item)
-        const chart = new G2.Chart({
+        const chart = new G6.Chart({
           container: el,
           autoFit: true,
           width: size,
           height: size,
-          padding: 30,
-          limitInPlot: false
+          layout: {
+            type: 'force',
+            preventOverlap: true,
+            linkDistance: (d) => {
+              if (d.source.id === 'node0') {
+                return 100
+              }
+              return 30
+            },
+            nodeStrength: (d) => {
+              if (d.isLeaf) {
+                return -50
+              }
+              return -10
+            },
+            edgeStrength: (d) => {
+              if (d.source.id === 'node1' || d.source.id === 'node2' || d.source.id === 'node3') {
+                return 0.7
+              }
+              return 0.1
+            }
+          },
+          defaultNode: {
+            color: '#5B8FF9'
+          },
+          modes: {
+            default: ['drag-canvas']
+          }
         })
         chart.legend(false)
         chart.data(itemData)
