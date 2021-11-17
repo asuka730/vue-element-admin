@@ -1,5 +1,5 @@
+/* jshint esversion: 6 */
 import Vue from 'vue'
-
 import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
@@ -37,16 +37,12 @@ window.$ = $
 if (process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock')
   mockXHR()
-}
+};
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
   locale: enLang // 如果使用中文，无需设置，请删除
-})
-
-Vue.use(BaiduMap, {
-  ak: '0fAFiU3jZlGqwPwpc19z0ul1KZG5bQ61'
-})
+});
 
 // register global utility filters
 Object.keys(filters).forEach(key => {
@@ -63,4 +59,8 @@ new Vue({
   router,
   store,
   render: h => h(App)
+})
+
+Vue.use(BaiduMap, {
+  ak: '0fAFiU3jZlGqwPwpc19z0ul1KZG5bQ61'
 })
