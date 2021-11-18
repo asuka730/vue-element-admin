@@ -12,6 +12,7 @@
         />
         <div class="info-content">
           <h2>{{ rightDetailData ? rightDetailData.data.data.scenic_name : "" }}</h2>
+          <h2>{{ rightDetailData ? rightDetailData.data.data.address : "" }}</h2>
         </div>
       </div></dv-border-box-1>
   </div>
@@ -26,38 +27,35 @@ export default {
       default: undefined
     },
     config: {
-      data: [
-        {
-          name: {
-            type: String,
-            default: '容纳量'
+      default: {
+        data: [
+          {
+            name: '目前人数',
+            value: 80
           },
-          value: {
-            type: Number,
-            default: 100
+          {
+            name: '容纳量',
+            value: 1000
           }
-        },
-        {
-          name: {
-            type: String,
-            default: '目前人数'
-          },
-          value: {
-            type: Number,
-            default: 80
-          }
-        }
-      ]
+        ]
+      }
     }
   },
   data() {
     return {
-
     }
   },
+  watch: {
+    config: () => {
+      this.updateHandle()
+    }
+  },
+
   methods: {
-    myFetch() {}
-  }
+    updateHandler() {
+      const { config } = this
+      this.config = { ...this.config }
+    } }
 }
 </script>
 

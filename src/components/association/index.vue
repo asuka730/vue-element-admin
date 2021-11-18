@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="right">
-          <rightDetail :right-detail-data="rightDetailData" />
+          <rightDetail :right-detail-data="rightDetailData" :config="config" />
         </div>
       </div>
     </dv-full-screen-container>
@@ -47,7 +47,8 @@ export default {
   },
   data() {
     return {
-      rightDetailData: null
+      rightDetailData: null,
+      config: null
     }
   },
   mounted() {},
@@ -55,10 +56,21 @@ export default {
     DetailHandler(data) {
       // TODO: 父亲组件
       this.rightDetailData = {
-        title: '123',
         data: data
       }
-      console.log(this.rightDetailData, '???')
+      this.config = {
+        data: [
+          {
+            name: '人数',
+            value: 6 * (150 - data.data.scenic_id)
+          },
+          {
+            name: '容纳量',
+            value: 4 * (11 + 2 * data.data.scenic_id)
+          }
+        ]
+
+      }
     }
   }
 }

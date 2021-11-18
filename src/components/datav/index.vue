@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="right">
-          <rightDetail :right-detail-data="rightDetailData" :config=" config" />
+          <rightDetail :right-detail-data="rightDetailData" :config="config" />
         </div>
       </div>
     </dv-full-screen-container>
@@ -54,9 +54,21 @@ export default {
   mounted() {},
   methods: {
     emitEvent(data) {
-      console.log('datav 父亲组件数据')
       this.rightDetailData = data
-      console.log(data)
+      // TODO：data.id 就是图的id
+      this.config = {
+        data: [
+          {
+            name: '目前人数',
+            value: data.people.current
+          },
+          {
+            name: '容纳量',
+            value: data.people.max - data.people.current
+          }
+        ]
+
+      }
       console.log(this.rightDetailData)
     }
   }

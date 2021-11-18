@@ -14,7 +14,7 @@
           <!--          <h2>{{ rightDetailData ? rightDetailData.coordinates : "" }}</h2>-->
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >当前人数 {{ rightDetailData? rightDetailData.people.current : "" }}</dv-decoration-7>
+          >当前人数 {{ rightDetailData? rightDetailData.id : "" }}</dv-decoration-7>
           <dv-decoration-7
             style="width: 150px; height: 30px"
           >容纳比 {{ rightDetailData? rightDetailData.people.current/rightDetailData.people.max : "" }}</dv-decoration-7>
@@ -39,27 +39,38 @@ export default {
     // TODO: 右边组件数据
     rightDetailData: {
       default: undefined
-    }
-  },
-  data() {
-    return {
-      config: {
+    },
+
+    config: {
+      default: {
         data: [
           {
             name: '目前人数',
-            value: 55
+            value: 80
           },
           {
             name: '容纳量',
-            value: 120
+            value: 100
           }
         ]
       }
     }
   },
+  data() {
+    return {
+    }
+  },
+  watch: {
+    config: () => {
+      this.updateHandle()
+    }
+  },
+
   methods: {
-    myFetch() {}
-  }
+    updateHandler() {
+      const { config } = this
+      this.config = { ...this.config }
+    } }
 }
 </script>
 
