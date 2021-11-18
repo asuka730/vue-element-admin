@@ -1,7 +1,7 @@
 <template>
   <div id="data-detail-right">
     <div class="info">
-      <h1>{{ rightDetailData ? rightDetailData.nodes[0].name : "" }}</h1>
+      <h1>{{ rightDetailData ? rightDetailData.name : "" }}</h1>
       <dv-decoration-1 style="width: 60%; height: 50px" />
     </div>
     <dv-border-box-1>
@@ -11,19 +11,17 @@
           style="width: 300px; height: 300px"
         />
         <div class="info-content">
-          <h2>{{ rightDetailData ? rightDetailData.coordinates : "" }}</h2>
+          <!--          <h2>{{ rightDetailData ? rightDetailData.coordinates : "" }}</h2>-->
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >当前人数 2</dv-decoration-7>
+          >当前人数 {{ rightDetailData? rightDetailData.people.current : "" }}</dv-decoration-7>
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >容纳比 3</dv-decoration-7>
+          >容纳比 {{ rightDetailData? rightDetailData.people.current/rightDetailData.people.max : "" }}</dv-decoration-7>
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >最大容纳人数 4</dv-decoration-7>
-          <dv-decoration-7
-            style="width: 150px; height: 30px"
-          >疫情防控评级 5</dv-decoration-7>
+          >最大容纳人数 {{ rightDetailData? rightDetailData.people.max : "" }}</dv-decoration-7>
+
         </div>
       </div></dv-border-box-1>
 
@@ -47,10 +45,10 @@ export default {
     return {
       config: {
         data: [
-          // {
-          //   name: '目前人数',
-          //   value: 55
-          // },
+          {
+            name: '目前人数',
+            value: 55
+          },
           {
             name: '容纳量',
             value: 120

@@ -51,7 +51,6 @@ export default {
     )
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.result.location.lng, res.result.location.lat)
         this.scene = new Scene({
           id: 'map-gaode',
           map: new GaodeMap({
@@ -99,9 +98,7 @@ export default {
         type: 'POST',
         async: false,
         success: function(data) {
-          console.log(that.pointsData)
           that.pointsData.nodes = data.data
-          console.log(that.pointsData)
         }
       })
     },
@@ -112,7 +109,6 @@ export default {
       data.nodes.forEach(function(item) {
         const el = document.createElement('div')
         const total = item.people.max
-        console.log(total)
         const size = Math.min(parseInt(total / 5, 10), 150)
         if (size < 30) {
           return
@@ -182,7 +178,7 @@ export default {
           const { state, stateStatus, element } = ev.gEvent.originalEvent
           if (state && stateStatus) {
             _this.showDetail && _this.showDetail(element.data.pId)
-            _this.emitEvent && _this.emitEvent()
+            _this.emitEvent && _this.emitEvent(element.data.pId)
           }
           // 本示例只需要监听 active 的状态变化
           if (state === 'active') {
@@ -238,9 +234,9 @@ export default {
         }
       })
     },
-    emitEvent() {
-      console.log('map组件数据')
-      this.$emit('fatherEvent', this.pointsData)
+    emitEvent(pid) {
+      console.log(this.pointsData.nodes[pid - 1], pid - 1)
+      this.$emit('fatherEvent', this.pointsData.nodes[pid - 1])
     }
     // showDetail(id) {
     //   const _this = this;

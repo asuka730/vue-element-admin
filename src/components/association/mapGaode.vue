@@ -67,7 +67,6 @@ export default {
         async: false,
         success: function(data) {
           that.MapData = data
-          console.log(data)
         }
       })
     },

@@ -54,6 +54,10 @@ export default {
     handleIdx(i) {
       console.log(i)
       this.idx = i
+    },
+    getCurImage() {
+      // this.cemeras = props.
+
     }
   }
 }
