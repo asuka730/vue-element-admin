@@ -57,7 +57,7 @@ export default {
           map: new GaodeMap({
             pitch: 0,
             center: [
-              Number(res.result.location.lng - 0.010),
+              Number(res.result.location.lng - 0.01),
               Number(res.result.location.lat - 0.004)
             ],
             zoom: 16.5,
@@ -94,7 +94,7 @@ export default {
       $.ajax({
         url: 'http://127.0.0.1:8000/api/get_list', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
         data: {
-          'time': 1636609435
+          time: 1636609435
         },
         type: 'POST',
         async: false,
@@ -182,6 +182,7 @@ export default {
           const { state, stateStatus, element } = ev.gEvent.originalEvent
           if (state && stateStatus) {
             _this.showDetail && _this.showDetail(element.data.pId)
+            _this.emitEvent && _this.emitEvent()
           }
           // 本示例只需要监听 active 的状态变化
           if (state === 'active') {
@@ -236,6 +237,10 @@ export default {
           lastItem = null
         }
       })
+    },
+    emitEvent() {
+      console.log('map组件数据')
+      this.$emit('fatherEvent', this.pointsData)
     }
     // showDetail(id) {
     //   const _this = this;
