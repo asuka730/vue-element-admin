@@ -96,7 +96,7 @@ export default {
     associationList() {
       const that = this
       $.ajax({
-        url: 'http://127.0.0.1:8000/api/get_association_one', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        url: 'http://14.100.89.102:8888/api/get_association_one', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
         type: 'GET',
         data: {
           scenic_id: this.rightDetailData.data.data.scenic_id
