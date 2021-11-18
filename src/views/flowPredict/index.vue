@@ -20,84 +20,91 @@
 </template>
 <script type="text/javascript" src="./echarts-master/dist/extension/bmap.min.js"></script>
 <script>
-  import axios from 'axios';
-  require('echarts/extension/bmap/bmap');
-  import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
-  import { loadBMap } from '../../map.js'
-  export default {
-    name: 'FlowPredict',
-    data() {
-      return {
-        id: 1,
-        xLabel: [],
-        predict: [],
-        real: [],
-        url: ''
-      }
-    },
-    mounted() {
-      const api='http://121.37.92.93:8000/api/get_predict_list?scenic_id=1';
-      axios.get(api).then((response)=>{
-        console.log("successfully connected");
-        console.log(response);
-        var array=[].concat(response.data.time);
-        var array2=[];
-        for (var i=1;i<125;i++){
-          if (!!array[i]){
-            array2.push(array[i].substring(0,10));
-          }
+import axios from 'axios';
+require('echarts/extension/bmap/bmap');
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue';
+import { loadBMap } from '../../map.js'
+export default {
+  name: 'FlowPredict',
+  data() {
+    return {
+      id: 1,
+      xLabel: [],
+      predict: [],
+      real: [],
+      url: '',
+      points: []
+    }
+  },
+  mounted() {
+    const api='http://121.37.92.93:8000/api/get_predict_list?scenic_id=1';
+    axios.get(api).then((response)=>{
+      var array=[].concat(response.data.time);
+      var array2=[];
+      for (var i=1;i<125;i++){
+        if (!!array[i]){
+          array2.push(array[i].substring(0,10));
         }
-        console.log(array);
-        this.xLabel = array2;
-        this.predict= [].concat(response.data.forecast);
-        this.real= [].concat(response.data.actual);
-        console.log("this.xLabel");
-        console.log(this.xLabel);
-        this.drawChart1();
-      })
-      this.$nextTick(() => {
-        loadBMap("0fAFiU3jZlGqwPwpc19z0ul1KZG5bQ61").then(() => {
-          this.drawChart2()
+      }
+      this.xLabel = array2;
+      this.predict= [].concat(response.data.forecast);
+      this.real= [].concat(response.data.actual);
+      this.drawChart1();
+    })
+    this.$nextTick(() => {
+      loadBMap("0fAFiU3jZlGqwPwpc19z0ul1KZG5bQ61").then(() => {
+        const api='http://121.37.92.93:8000/api/heat_map?scenic_id=1';
+        axios.get(api).then((response)=>{
+          var data = response.data.data;
+          data = [].concat.apply(
+            [].concat.apply(
+              data.map(function (track) {
+                return track[1].concat(track[2]);
+              })
+            )
+          )
+          this.points = data;
+          this.drawChart2();
         })
       })
-    },
-    methods: {
-      drawChart1() {
-        let myEchart = this.$echarts.init(document.getElementById("main"));
+    })
+  },
+  methods: {
+    drawChart1() {
+      let myEchart = this.$echarts.init(document.getElementById("main"));
+      let xLabel = this.xLabel;
+      let predict = this.predict;
+      let real = this.real;
 
-        let xLabel = this.xLabel;
-        let predict = this.predict;
-        let real = this.real;
-
-        let option = {
-          backgroundColor: 'rgb(14,28,71)',
-          tooltip: {
-            trigger: 'axis',
-            backgroundColor:'transparent',
-            axisPointer: {
-              lineStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  y: 0,
-                  x2: 0,
-                  y2: 1,
-                  colorStops: [{
-                    offset: 0,
-                    color: 'rgba(126,199,255,0)' // 0% 处的颜色
-                  }, {
-                    offset: 0.5,
-                    color: 'rgba(126,199,255,1)' // 100% 处的颜色
-                  }, {
-                    offset: 1,
-                    color: 'rgba(126,199,255,0)' // 100% 处的颜色
-                  }],
-                  global: false // 缺省为 false
-                }
-              },
+      let option = {
+        backgroundColor: 'rgb(14,28,71)',
+        tooltip: {
+          trigger: 'axis',
+          backgroundColor:'transparent',
+          axisPointer: {
+            lineStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0,
+                  color: 'rgba(126,199,255,0)' // 0% 处的颜色
+                }, {
+                  offset: 0.5,
+                  color: 'rgba(126,199,255,1)' // 100% 处的颜色
+                }, {
+                  offset: 1,
+                  color: 'rgba(126,199,255,0)' // 100% 处的颜色
+                }],
+                global: false // 缺省为 false
+              }
             },
-            formatter: (p) => {
-              let dom = `<div style="width: 79px;
+          },
+          formatter: (p) => {
+            let dom = `<div style="width: 79px;
 	height: 50px;;color:#fff;position: relative;">
         <svg style="position: absolute;top: 50%;
     left: 50%;
@@ -133,363 +140,351 @@
             </div>
         </div>
     </div>`
-              return dom
+            return dom
+          }
+        },
+        legend: {
+          align: "left",
+          right: '10%',
+          top:'10%',
+          type:'plain',
+          textStyle:{
+            color:'#7ec7ff',
+            fontSize:12
+          },
+          // icon:'rect',
+          itemGap:25,
+          itemWidth:18,
+          icon:'path://M0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z',
+
+          data: [
+            {
+              name: '预测人数'
+            },
+            {
+              name: '实际人数'
+            }
+          ]
+        },
+        grid: {
+          top: '15%',
+          left: '10%',
+          right: '10%',
+          bottom: '15%',
+          // containLabel: true
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          axisLine: { //坐标轴轴线相关设置。数学上的x轴
+            show: true,
+            lineStyle: {
+              color: '#233653'
+            },
+          },
+          axisLabel: { //坐标轴刻度标签的相关设置
+            textStyle: {
+              color: '#7ec7ff',
+              padding: 16,
+              fontSize: 8
+            },
+            formatter: function(data) {
+              return data
             }
           },
-          legend: {
-            align: "left",
-            right: '10%',
-            top:'10%',
-            type:'plain',
-            textStyle:{
-              color:'#7ec7ff',
-              fontSize:12
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: '#192a44'
             },
-            // icon:'rect',
-            itemGap:25,
-            itemWidth:18,
-            icon:'path://M0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z',
-
-            data: [
-              {
-                name: '预测人数'
-              },
-              {
-                name: '实际人数'
-              }
-            ]
           },
-          grid: {
-            top: '15%',
-            left: '10%',
-            right: '10%',
-            bottom: '15%',
-            // containLabel: true
+          axisTick: {
+            show: false,
           },
-          xAxis: [{
-            type: 'category',
-            boundaryGap: false,
-            axisLine: { //坐标轴轴线相关设置。数学上的x轴
-              show: true,
-              lineStyle: {
-                color: '#233653'
-              },
+          data: xLabel
+        }],
+        yAxis: [{
+          name: '人数',
+          nameTextStyle: {
+            color: "#7ec7ff",
+            fontSize: 10,
+            padding: 0
+          },
+          min: 0,
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: '#192a44'
             },
-            axisLabel: { //坐标轴刻度标签的相关设置
-              textStyle: {
-                color: '#7ec7ff',
-                padding: 16,
-                fontSize: 8
-              },
-              formatter: function(data) {
-                return data
-              }
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: '#192a44'
-              },
-            },
-            axisTick: {
-              show: false,
-            },
-            data: xLabel
-          }],
-          yAxis: [{
-            name: '人数',
-            nameTextStyle: {
-              color: "#7ec7ff",
-              fontSize: 10,
-              padding: 0
-            },
-            min: 0,
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: '#192a44'
-              },
-            },
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: "#233653"
-              }
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#233653"
+            }
 
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: '#7ec7ff',
+              padding: 1
             },
-            axisLabel: {
-              show: true,
-              textStyle: {
-                color: '#7ec7ff',
-                padding: 1
-              },
-              formatter: function(value) {
-                if (value === 0) {
-                  return value
-                }
+            formatter: function(value) {
+              if (value === 0) {
                 return value
               }
+              return value
+            }
+          },
+          axisTick: {
+            show: false,
+          },
+        }],
+        series: [{
+          name: '预测人数',
+          type: 'line',
+          symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
+          showAllSymbol: true,
+          symbolSize: 0,
+          smooth: true,
+          lineStyle: {
+            normal: {
+              width: 2,
+              color: "rgba(25,163,223,1)", // 线条颜色
             },
-            axisTick: {
-              show: false,
-            },
-          }],
-          series: [{
-            name: '预测人数',
-            type: 'line',
-            symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
-            showAllSymbol: true,
-            symbolSize: 0,
-            smooth: true,
-            lineStyle: {
-              normal: {
-                width: 2,
-                color: "rgba(25,163,223,1)", // 线条颜色
+            borderColor: 'rgba(0,0,0,.4)',
+          },
+          itemStyle: {
+            color: "rgba(25,163,223,1)",
+            borderColor: "#646ace",
+            borderWidth: 2
+
+          },
+          tooltip: {
+            show: true
+          },
+          areaStyle: { //区域填充样式
+            normal: {
+              //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                offset: 0,
+                color: "rgba(25,163,223,.3)"
+
+
               },
-              borderColor: 'rgba(0,0,0,.4)',
+                {
+                  offset: 1,
+                  color: "rgba(25,163,223, 0)"
+                }
+              ], false),
+              shadowColor: 'rgba(25,163,223, 0.5)', //阴影颜色
+              shadowBlur: 20 //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
+            }
+          },
+          data: predict
+        }, {
+          name: '实际人数',
+          type: 'line',
+          symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
+          showAllSymbol: true,
+          symbolSize: 0,
+          smooth: true,
+          lineStyle: {
+            normal: {
+              width: 2,
+              color: "rgba(10,219,250,1)", // 线条颜色
             },
-            itemStyle: {
-              color: "rgba(25,163,223,1)",
-              borderColor: "#646ace",
-              borderWidth: 2
+            borderColor: 'rgba(0,0,0,.4)',
+          },
+          itemStyle: {
+            color: "rgba(10,219,250,1)",
+            borderColor: "#646ace",
+            borderWidth: 2
 
-            },
-            tooltip: {
-              show: true
-            },
-            areaStyle: { //区域填充样式
-              normal: {
-                //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: "rgba(25,163,223,.3)"
-
-
-                },
-                  {
-                    offset: 1,
-                    color: "rgba(25,163,223, 0)"
-                  }
-                ], false),
-                shadowColor: 'rgba(25,163,223, 0.5)', //阴影颜色
-                shadowBlur: 20 //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
-              }
-            },
-            data: predict
-          }, {
-            name: '实际人数',
-            type: 'line',
-            symbol: 'circle', // 默认是空心圆（中间是白色的），改成实心圆
-            showAllSymbol: true,
-            symbolSize: 0,
-            smooth: true,
-            lineStyle: {
-              normal: {
-                width: 2,
-                color: "rgba(10,219,250,1)", // 线条颜色
+          },
+          tooltip: {
+            show: true
+          },
+          areaStyle: { //区域填充样式
+            normal: {
+              //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                offset: 0,
+                color: "rgba(10,219,250,.3)"
               },
-              borderColor: 'rgba(0,0,0,.4)',
-            },
-            itemStyle: {
-              color: "rgba(10,219,250,1)",
-              borderColor: "#646ace",
-              borderWidth: 2
-
-            },
-            tooltip: {
-              show: true
-            },
-            areaStyle: { //区域填充样式
-              normal: {
-                //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: "rgba(10,219,250,.3)"
-                },
-                  {
-                    offset: 1,
-                    color: "rgba(10,219,250, 0)"
+                {
+                  offset: 1,
+                  color: "rgba(10,219,250, 0)"
+                }
+              ], false),
+              shadowColor: 'rgba(10,219,250, 0.5)', //阴影颜色
+              shadowBlur: 20 //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
+            }
+          },
+          data: real
+        }]
+      };
+      myEchart.setOption(option);
+    },
+    drawChart2() {
+      var heatmap = this.$refs.heatmap;
+      let points = this.points;
+      if (heatmap) {
+        var myChart = this.$echarts.init(heatmap);
+        var option = {
+          animation: false,
+          bmap: {
+            center: [121.671964, 31.148267],
+            zoom: 15,
+            roam: true,
+            mapStyle: {
+              styleJson:
+                [{
+                  "featureType": "background",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "color": "#324e69ff"
                   }
-                ], false),
-                shadowColor: 'rgba(10,219,250, 0.5)', //阴影颜色
-                shadowBlur: 20 //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
-              }
+                }, {
+                  "featureType": "scenicspots",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "color": "#ffffffff"
+                  }
+                }, {
+                  "featureType": "road",
+                  "elementType": "geometry.fill",
+                  "stylers": {
+                    "color": "#4c817d36"
+                  }
+                }, {
+                  "featureType": "road",
+                  "elementType": "geometry",
+                  "stylers": {
+                    "visibility": "on",
+                    "weight": 1.8
+                  }
+                }, {
+                  "featureType": "road",
+                  "elementType": "geometry.stroke",
+                  "stylers": {
+                    "color": "#364e4bb0"
+                  }
+                }, {
+                  "featureType": "road",
+                  "elementType": "labels.text.fill",
+                  "stylers": {
+                    "color": "#3b2d64b0"
+                  }
+                }, {
+                  "featureType": "road",
+                  "elementType": "labels.text.stroke",
+                  "stylers": {
+                    "weight": 1.4,
+                    "color": "#ffffffad"
+                  }
+                }, {
+                  "featureType": "scenicspotslabel",
+                  "elementType": "labels.icon",
+                  "stylers": {
+                    "visibility": "on"
+                  }
+                }, {
+                  "featureType": "scenicspotslabel",
+                  "elementType": "labels.text.fill",
+                  "stylers": {
+                    "color": "#35503591"
+                  }
+                }
+                ]
             },
-            data: real
-          }]
+          },
+          visualMap: {
+            show: true,
+            top: 'top',
+            seriesIndex: 0,
+            calculable: true,
+            inRange: {
+              color: ['light blue', 'steel blue', 'blue', 'dark blue', 'midnight blue']
+            }
+          },
+          series: [
+            {
+              type: 'heatmap',
+              coordinateSystem: 'bmap',
+              data: points,
+              pointSize: 7,
+              blurSize: 6,
+            }
+          ]
         };
-
-        myEchart.setOption(option);
-      },
-      drawChart2() {
-        var heatmap = this.$refs.heatmap;
-        if (heatmap) {
-          var myChart = this.$echarts.init(heatmap);
-          var response = {
-            "columns": ["scenic_id", "coord", "number"],
-            "index": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99],
-            "data": [[1, [121.6661421006, 31.1408290773], 489], [2, [121.6788025589, 31.139600204], 485], [3, [121.668462856, 31.153889702], 209], [4, [121.6687072087, 31.1413722087], 444], [5, [121.6753901772, 31.1412201266], 322], [6, [121.6732022468, 31.1463803813], 448], [7, [121.6656164997, 31.1362255528], 137], [8, [121.6638625859, 31.1368578745], 90], [9, [121.6720949113, 31.1521887387], 392], [10, [121.6744199094, 31.1540879007], 288], [11, [121.6623241473, 31.1531450705], 378], [12, [121.6682974864, 31.1432658811], 21], [13, [121.6666194236, 31.1403525059], 124], [14, [121.6654541596, 31.1438507585], 486], [15, [121.6683301221, 31.1471643598], 414], [16, [121.6746963699, 31.1514977021], 267], [17, [121.6622072338, 31.1477645345], 350], [18, [121.6751523101, 31.1368745733], 80], [19, [121.6652238889, 31.1515511317], 28], [20, [121.6602232562, 31.1485592919], 383], [21, [121.6726974122, 31.1395009239], 15], [22, [121.6666186459, 31.1529608166], 266], [23, [121.6765323108, 31.136064102], 377], [24, [121.6788209922, 31.1526643851], 367], [25, [121.6603467557, 31.145798121], 255], [26, [121.6773783263, 31.1489765676], 49], [27, [121.671851463, 31.1495080793], 133], [28, [121.6759056158, 31.1365158931], 125], [29, [121.6625629717, 31.1368182713], 58], [30, [121.6713337462, 31.1493813078], 117], [31, [121.6719815465, 31.1386359362], 30], [32, [121.6687107511, 31.1390714411], 117], [33, [121.6709691407, 31.1530457824], 138], [34, [121.6779095882, 31.1508599276], 417], [35, [121.675494832, 31.1525903794], 33], [36, [121.6621173626, 31.1459378825], 484], [37, [121.678269646, 31.1386039264], 149], [38, [121.6768937823, 31.139951371], 206], [39, [121.6720664441, 31.1467558805], 232], [40, [121.6766269751, 31.1390096562], 161], [41, [121.6711449886, 31.1446716495], 393], [42, [121.6669088794, 31.1409694123], 457], [43, [121.6726643957, 31.1411691395], 377], [44, [121.6731951327, 31.1469416415], 446], [45, [121.6632379846, 31.1436584005], 339], [46, [121.6730954281, 31.1471858858], 205], [47, [121.6768542134, 31.1377810664], 34], [48, [121.6606085293, 31.1418527698], 269], [49, [121.6799241717, 31.1480611439], 402], [50, [121.6775721138, 31.1528848407], 244], [51, [121.6780752767, 31.1541077876], 179], [52, [121.6633758701, 31.1436696739], 365], [53, [121.6682705352, 31.1390432608], 454], [54, [121.6742546342, 31.1464657946], 386], [55, [121.6638798608, 31.1522471038], 182], [56, [121.660036507, 31.1498230203], 292], [57, [121.6679861704, 31.1508155083], 112], [58, [121.6746050761, 31.15217478], 290], [59, [121.6652040285, 31.1458055405], 407], [60, [121.6767642954, 31.14154223], 173], [61, [121.6778984401, 31.1509025448], 132], [62, [121.6703057468, 31.1454084269], 364], [63, [121.6674960598, 31.1446657286], 480], [64, [121.6689061083, 31.1478786881], 213], [65, [121.6759420872, 31.1359604573], 226], [66, [121.6723319358, 31.138716766], 81], [67, [121.6769731322, 31.1517201493], 337], [68, [121.6753661433, 31.1502130183], 238], [69, [121.6656545527, 31.1432687976], 333], [70, [121.6787282589, 31.1445465085], 445], [71, [121.673382308, 31.1495582743], 462], [72, [121.6785805213, 31.1356836253], 346], [73, [121.6764456451, 31.1369384342], 374], [74, [121.6605826236, 31.1543886402], 489], [75, [121.6622748412, 31.1408819044], 103], [76, [121.6685764862, 31.1493836485], 374], [77, [121.6698199067, 31.1502736719], 208], [78, [121.6702040128, 31.13526101], 59], [79, [121.6701530075, 31.1355733938], 458], [80, [121.679266451, 31.1505581925], 313], [81, [121.6709814816, 31.1490637955], 284], [82, [121.6639547315, 31.1454117161], 114], [83, [121.6768721373, 31.1507614305], 203], [84, [121.6609384533, 31.1355919457], 10], [85, [121.6659088781, 31.140395127], 134], [86, [121.660396266, 31.1402407659], 235], [87, [121.6706241604, 31.146742046], 182], [88, [121.6612241693, 31.1471705134], 190], [89, [121.6620001433, 31.1535786229], 486], [90, [121.6706552127, 31.1547093489], 309], [91, [121.6663324374, 31.1515210332], 224], [92, [121.6626873613, 31.1514148436], 126], [93, [121.6707286573, 31.1429858173], 269], [94, [121.6647961739, 31.135647748], 135], [95, [121.6758876991, 31.1450674168], 346], [96, [121.6759723188, 31.1468100265], 242], [97, [121.6634706866, 31.148184841], 134], [98, [121.6757182305, 31.1411972725], 368], [99, [121.6798355975, 31.1517399028], 381], [100, [121.6651684187, 31.146049545], 160],]
-          };
-          var mydata = response.data;
-          var points = [].concat.apply(
-            [].concat.apply(
-              mydata.map(function (track) {
-                return track[1].concat(track[2]);
-              })
-            )
-          )
-          var option = {
-            animation: false,
-            bmap: {
-              center: [121.671964, 31.148267],
-              zoom: 15,
-              roam: true,
-              mapStyle: {
-                styleJson:
-                  [{
-                    "featureType": "background",
-                    "elementType": "geometry",
-                    "stylers": {
-                      "color": "#324e69ff"
-                    }
-                  }, {
-                    "featureType": "scenicspots",
-                    "elementType": "geometry",
-                    "stylers": {
-                      "color": "#ffffffff"
-                    }
-                  }, {
-                    "featureType": "road",
-                    "elementType": "geometry.fill",
-                    "stylers": {
-                      "color": "#4c817d36"
-                    }
-                  }, {
-                    "featureType": "road",
-                    "elementType": "geometry",
-                    "stylers": {
-                      "visibility": "on",
-                      "weight": 1.8
-                    }
-                  }, {
-                    "featureType": "road",
-                    "elementType": "geometry.stroke",
-                    "stylers": {
-                      "color": "#364e4bb0"
-                    }
-                  }, {
-                    "featureType": "road",
-                    "elementType": "labels.text.fill",
-                    "stylers": {
-                      "color": "#3b2d64b0"
-                    }
-                  }, {
-                    "featureType": "road",
-                    "elementType": "labels.text.stroke",
-                    "stylers": {
-                      "weight": 1.4,
-                      "color": "#ffffffad"
-                    }
-                  }, {
-                    "featureType": "scenicspotslabel",
-                    "elementType": "labels.icon",
-                    "stylers": {
-                      "visibility": "on"
-                    }
-                  }, {
-                    "featureType": "scenicspotslabel",
-                    "elementType": "labels.text.fill",
-                    "stylers": {
-                      "color": "#35503591"
-                    }
-                  }
-                  ]
-              },
-            },
-            visualMap: {
-              show: true,
-              top: 'top',
-              seriesIndex: 0,
-              calculable: true,
-              inRange: {
-                color: ['light blue', 'steel blue', 'blue', 'dark blue', 'midnight blue']
-              }
-            },
-            series: [
-              {
-                type: 'heatmap',
-                coordinateSystem: 'bmap',
-                data: points,
-                pointSize: 7,
-                blurSize: 6,
-              }
-            ]
-          };
-          myChart.setOption(option);
-          var bmap = myChart.getModel().getComponent('bmap').getBMap();
-          bmap.addControl(new BMap.MapTypeControl());
-        }
+        myChart.setOption(option);
+        var bmap = myChart.getModel().getComponent('bmap').getBMap();
+        bmap.addControl(new BMap.MapTypeControl());
       }
     }
   }
+}
 </script>
 
 <style scoped>
-  .Echart {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: #0e1c47;
-    text-align: center;
-    border: 0px solid #fc0303;
-    border-radius: 5px;
-  }
+.Echart {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #0e1c47;
+  text-align: center;
+  border: 0px solid #fc0303;
+  border-radius: 5px;
+}
 
-  .weather {
-    position: fixed;
-    right: 0;
-    top: 100px;
-    width: 54%;
-    height: 250px;
-    margin: auto;
-    color: #cccccc;
-  }
-  .predict {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 250px;
-    margin: 0 auto;
-    text-align: center;
-    border: 0px solid #716c6c;
-    border-radius: 5px;
-  }
-  #chart{
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 600px;
-    height: 300px;
-    margin: 0 auto;
-    text-align: center;
-    border: 0px solid rgba(255,255,255,0.2);
-    border-radius: 5px;
-    opacity: 0.5
-  }
-  #main {
-    width: 90%;
-    height: 100%;
-    margin: 0 auto;
-    border: 0px solid #fc0303;
-    border-radius: 5px;
-  }
-  #chart .anchorBL{
-    display:none
-  }
-  #chart .BMap_noprint.anchorTR{
-    display:none
-  }
+.weather {
+  position: fixed;
+  right: 0;
+  top: 100px;
+  width: 54%;
+  height: 250px;
+  margin: auto;
+  color: #cccccc;
+}
+.predict {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 250px;
+  margin: 0 auto;
+  text-align: center;
+  border: 0px solid #716c6c;
+  border-radius: 5px;
+}
+#chart{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 600px;
+  height: 300px;
+  margin: 0 auto;
+  text-align: center;
+  border: 0px solid rgba(255,255,255,0.2);
+  border-radius: 5px;
+  opacity: 0.5
+}
+#main {
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+  border: 0px solid #fc0303;
+  border-radius: 5px;
+}
+#chart .anchorBL{
+  display:none
+}
+#chart .BMap_noprint.anchorTR{
+  display:none
+}
 </style>
+
