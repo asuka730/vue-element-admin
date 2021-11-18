@@ -181,7 +181,7 @@ export default {
         chart.on('element:statechange', (ev) => {
           const { state, stateStatus, element } = ev.gEvent.originalEvent
           if (state && stateStatus) {
-            _this.showDetail(element.data.pId)
+            _this.showDetail && _this.showDetail(element.data.pId)
           }
           // 本示例只需要监听 active 的状态变化
           if (state === 'active') {

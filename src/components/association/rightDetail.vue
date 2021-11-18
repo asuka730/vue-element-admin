@@ -1,7 +1,7 @@
 <template>
   <div id="data-detail-right">
     <div class="info">
-      <h1>景点1</h1>
+      <h1>{{ rightDetailData ? rightDetailData.title : "" }}</h1>
       <dv-decoration-1 style="width: 60%; height: 50px" />
     </div>
     <dv-border-box-1>
@@ -11,32 +11,21 @@
           style="width: 300px; height: 300px"
         />
         <div class="info-content">
-          <h2>摄像头1</h2>
-          <dv-decoration-7
-            style="width: 150px; height: 30px"
-          >当前人数 2</dv-decoration-7>
-          <dv-decoration-7
-            style="width: 150px; height: 30px"
-          >容纳比 3</dv-decoration-7>
-          <dv-decoration-7
-            style="width: 150px; height: 30px"
-          >最大容纳人数 4</dv-decoration-7>
-          <dv-decoration-7
-            style="width: 150px; height: 30px"
-          >疫情防控评级 5</dv-decoration-7>
+          <h2>{{ rightDetailData ? rightDetailData.data.nodes[0].id : "" }}</h2>
         </div>
       </div></dv-border-box-1>
-
-    <Carousel />
   </div>
 </template>
 
 <script>
-import Carousel from '../Carousel'
-
 export default {
   name: 'RightDetail',
-  components: { Carousel },
+  props: {
+    // TODO: 右边组件数据
+    rightDetailData: {
+      default: undefined
+    }
+  },
   data() {
     return {
       config: {

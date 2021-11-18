@@ -16,10 +16,12 @@
             <digital-flop />
           </div>
           <div class="">
-            <mapGaode />
+            <mapGaode @fatherEvent="DetailHandler" />
           </div>
         </div>
-        <div class="right"><rightDetail /></div>
+        <div class="right">
+          <rightDetail :right-detail-data="rightDetailData" />
+        </div>
       </div>
     </dv-full-screen-container>
   </div>
@@ -44,10 +46,21 @@ export default {
     Tab
   },
   data() {
-    return {}
+    return {
+      rightDetailData: null
+    }
   },
   mounted() {},
-  methods: {}
+  methods: {
+    DetailHandler(data) {
+      // TODO: 父亲组件
+      this.rightDetailData = {
+        title: '123',
+        data: data
+      }
+      console.log(data)
+    }
+  }
 }
 </script>
 
