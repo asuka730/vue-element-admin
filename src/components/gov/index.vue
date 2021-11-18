@@ -3,6 +3,9 @@
     <dv-full-screen-container>
       <div class="main-head">
         <top-header />
+        <div class="head-tabs">
+          <Tab />
+        </div>
       </div>
       <div class="main-content">
         <div id="left-container" class="left">
@@ -30,6 +33,7 @@ import flyLine from './flyline.vue'
 import leftPeople from './leftPeople.vue'
 import rightChart from './rightChart.vue'
 import rightMap from './rightMap.vue'
+import Tab from '../Tabs/index.vue'
 
 export default {
   name: 'Gov',
@@ -39,12 +43,18 @@ export default {
     flyLine,
     leftPeople,
     rightChart,
-    rightMap
+    rightMap,
+    Tab
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.head-tabs {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+}
 #data-view {
   width: 100%;
   height: 100%;
