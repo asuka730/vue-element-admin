@@ -7,10 +7,10 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+// import componentsRouter from './modules/components'
+// import chartsRouter from './modules/charts'
+// import tableRouter from './modules/table'
+// import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -121,124 +121,126 @@ export const constantRoutes = [{
       affix: true
     }
   }]
-},
-{
-  path: '/documentation',
-  component: Layout,
-  children: [{
-    path: 'index',
-    component: () => import('@/views/documentation/index'),
-    name: 'Documentation',
-    meta: {
-      title: 'Documentation',
-      icon: 'documentation',
-      affix: true
-    }
-  }]
 }
+// {
+//   path: '/documentation',
+//   component: Layout,
+//   children: [{
+//     path: 'index',
+//     component: () => import('@/views/documentation/index'),
+//     name: 'Documentation',
+//     meta: {
+//       title: 'Documentation',
+//       icon: 'documentation',
+//       affix: true
+//     }
+//   }]
+// }
 ]
 
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [{
-  path: '/permission',
-  component: Layout,
-  redirect: '/permission/page',
-  alwaysShow: true, // will always show the root menu
-  name: 'Permission',
-  meta: {
-    title: 'Permission',
-    icon: 'lock',
-    roles: ['admin', 'editor'] // you can set roles in root nav
-  },
-  children: [{
-    path: 'page',
-    component: () => import('@/views/permission/page'),
-    name: 'PagePermission',
-    meta: {
-      title: 'Page Permission',
-      roles: ['admin'] // or you can only set roles in sub nav
-    }
-  },
+export const asyncRoutes = [
+//   {
+//   path: '/permission',
+//   component: Layout,
+//   redirect: '/permission/page',
+//   alwaysShow: false, // will always show the root menu
+//   name: 'Permission',
+//   meta: {
+//     title: 'Permission',
+//     icon: 'lock',
+//     roles: ['admin', 'editor'] // you can set roles in root nav
+//   },
+//   children: [
+//     {
+//     path: 'page',
+//     component: () => import('@/views/permission/page'),
+//     name: 'PagePermission',
+//     meta: {
+//       title: 'Page Permission',
+//       roles: ['admin'] // or you can only set roles in sub nav
+//     }
+//   },
+//   {
+//     path: 'directive',
+//     component: () => import('@/views/permission/directive'),
+//     name: 'DirectivePermission',
+//     meta: {
+//       title: 'Directive Permission'
+//       // if do not set roles, means: this page does not require permission
+//     }
+//   },
+//   {
+//     path: 'role',
+//     component: () => import('@/views/permission/role'),
+//     name: 'RolePermission',
+//     meta: {
+//       title: 'Role Permission',
+//       roles: ['admin']
+//     }
+//   }
+//   ]
+// },
+
+  /** when your routing map is too long, you can split it into small modules **/
+  // componentsRouter,
+  // chartsRouter,
+  // nestedRouter,
+  // tableRouter,
+
+  // {
+  //   path: '/error',
+  //   component: Layout,
+  //   redirect: 'noRedirect',
+  //   name: 'ErrorPages',
+  //   meta: {
+  //     title: 'Error Pages',
+  //     icon: '404'
+  //   },
+  //   children: [{
+  //     path: '401',
+  //     component: () => import('@/views/error-page/401'),
+  //     name: 'Page401',
+  //     meta: {
+  //       title: '401',
+  //       noCache: true
+  //     }
+  //   },
+  //   {
+  //     path: '404',
+  //     component: () => import('@/views/error-page/404'),
+  //     name: 'Page404',
+  //     meta: {
+  //       title: '404',
+  //       noCache: true
+  //     }
+  //   }
+  //   ]
+  // },
+
+  // {
+  //   path: '/error-log',
+  //   component: Layout,
+  //   children: [{
+  //     path: 'log',
+  //     component: () => import('@/views/error-log/index'),
+  //     name: 'ErrorLog',
+  //     meta: {
+  //       title: 'Error Log',
+  //       icon: 'bug'
+  //     }
+  //   }]
+  // },
+
+  // 404 page must be placed at the end !!!
   {
-    path: 'directive',
-    component: () => import('@/views/permission/directive'),
-    name: 'DirectivePermission',
-    meta: {
-      title: 'Directive Permission'
-      // if do not set roles, means: this page does not require permission
-    }
-  },
-  {
-    path: 'role',
-    component: () => import('@/views/permission/role'),
-    name: 'RolePermission',
-    meta: {
-      title: 'Role Permission',
-      roles: ['admin']
-    }
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
-  ]
-},
-
-/** when your routing map is too long, you can split it into small modules **/
-componentsRouter,
-chartsRouter,
-nestedRouter,
-tableRouter,
-
-{
-  path: '/error',
-  component: Layout,
-  redirect: 'noRedirect',
-  name: 'ErrorPages',
-  meta: {
-    title: 'Error Pages',
-    icon: '404'
-  },
-  children: [{
-    path: '401',
-    component: () => import('@/views/error-page/401'),
-    name: 'Page401',
-    meta: {
-      title: '401',
-      noCache: true
-    }
-  },
-  {
-    path: '404',
-    component: () => import('@/views/error-page/404'),
-    name: 'Page404',
-    meta: {
-      title: '404',
-      noCache: true
-    }
-  }
-  ]
-},
-
-{
-  path: '/error-log',
-  component: Layout,
-  children: [{
-    path: 'log',
-    component: () => import('@/views/error-log/index'),
-    name: 'ErrorLog',
-    meta: {
-      title: 'Error Log',
-      icon: 'bug'
-    }
-  }]
-},
-
-// 404 page must be placed at the end !!!
-{
-  path: '*',
-  redirect: '/404',
-  hidden: true
-}
 ]
 
 const createRouter = () => new Router({
