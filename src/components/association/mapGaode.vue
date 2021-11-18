@@ -11,23 +11,23 @@ export default {
     return {
       MapData: {
         nodes: [
-          { id: 'node0', size: 50 },
+          { id: 'node0', label: 'asas', size: 50 },
           { id: 'node1', size: 30 },
           { id: 'node2', size: 30 },
           { id: 'node3', size: 30 },
-          { id: 'node4', size: 30, isLeaf: true },
-          { id: 'node5', size: 30, isLeaf: true },
-          { id: 'node6', size: 15, isLeaf: true },
-          { id: 'node7', size: 15, isLeaf: true },
-          { id: 'node8', size: 15, isLeaf: true },
-          { id: 'node9', size: 15, isLeaf: true },
-          { id: 'node10', size: 15, isLeaf: true },
-          { id: 'node11', size: 15, isLeaf: true },
-          { id: 'node12', size: 15, isLeaf: true },
-          { id: 'node13', size: 15, isLeaf: true },
-          { id: 'node14', size: 15, isLeaf: true },
-          { id: 'node15', size: 15, isLeaf: true },
-          { id: 'node16', size: 15, isLeaf: true }
+          { id: 'node4', size: 30 },
+          { id: 'node5', size: 30 },
+          { id: 'node6', size: 15 },
+          { id: 'node7', size: 15 },
+          { id: 'node8', size: 15 },
+          { id: 'node9', size: 15 },
+          { id: 'node10', size: 15 },
+          { id: 'node11', size: 15 },
+          { id: 'node12', size: 15 },
+          { id: 'node13', size: 15 },
+          { id: 'node14', size: 15 },
+          { id: 'node15', size: 15 },
+          { id: 'node16', size: 15 }
         ],
         edges: [
           { source: 'node0', target: 'node1' },
@@ -50,12 +50,28 @@ export default {
       }
     }
   },
+  created() {
+    this.getnodeList()
+  },
   mounted() {
     setTimeout(() => {
       this.render()
     }, 300)
   },
   methods: {
+    getnodeList() {
+      var that = this
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/get_association_list', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        type: 'GET',
+        async: false,
+        success: function(data) {
+          that.MapData = data
+          console.log(data)
+        }
+      })
+    },
+
     render() {
       const container = document.getElementById('container')
       const width = container.scrollWidth
@@ -68,10 +84,10 @@ export default {
           type: 'force',
           preventOverlap: true,
           linkDistance: (d) => {
-            if (d.source.id === 'node0') {
-              return 200
+            if (d.source.id === '1') {
+              return 300
             }
-            return 60
+            return 200
           },
           nodeStrength: (d) => {
             if (d.isLeaf) {
@@ -126,8 +142,9 @@ export default {
       })
 
       graph.on('node:click', (e) => {
-        // e.item.get("model").style.fill = 'red'
-        this.rightDetailevent()
+        // e.item.get("model").style.fill = 'red
+        this.rightDetailevent(e.item.get('model').id)
+        // console.log(e.item.get('model'),"??")
         graph.layout()
       })
 
@@ -145,9 +162,21 @@ export default {
         model.fy = e.y
       }
     },
-    rightDetailevent() {
+    rightDetailevent(id) {
       // TODO: 中间组件数据
-      this.$emit('fatherEvent', this.MapData)
+      var that = this
+      var scenic_id = parseInt(id)
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/get_scenic', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        type: 'GET',
+        data: {
+          scenic_id: scenic_id
+        },
+        async: false,
+        success: function(data) {
+          that.$emit('fatherEvent', data)
+        }
+      })
     }
   }
 }

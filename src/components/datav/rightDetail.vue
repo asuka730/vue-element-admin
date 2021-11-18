@@ -47,10 +47,10 @@ export default {
     return {
       config: {
         data: [
-          {
-            name: '目前人数',
-            value: 55
-          },
+          // {
+          //   name: '目前人数',
+          //   value: 55
+          // },
           {
             name: '容纳量',
             value: 120

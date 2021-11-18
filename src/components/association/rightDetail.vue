@@ -1,7 +1,7 @@
 <template>
   <div id="data-detail-right">
     <div class="info">
-      <h1>{{ rightDetailData ? rightDetailData.title : "" }}</h1>
+      <h1>节点编号：{{ rightDetailData ? rightDetailData.data.data.scenic_id : "" }}</h1>
       <dv-decoration-1 style="width: 60%; height: 50px" />
     </div>
     <dv-border-box-1>
@@ -11,7 +11,7 @@
           style="width: 300px; height: 300px"
         />
         <div class="info-content">
-          <h2>{{ rightDetailData ? rightDetailData.data.nodes[0].id : "" }}</h2>
+          <h2>{{ rightDetailData ? rightDetailData.data.data.scenic_name : "" }}</h2>
         </div>
       </div></dv-border-box-1>
   </div>
@@ -24,22 +24,35 @@ export default {
     // TODO: 右边组件数据
     rightDetailData: {
       default: undefined
+    },
+    config: {
+      data: [
+        {
+          name: {
+            type: String,
+            default: '容纳量'
+          },
+          value: {
+            type: Number,
+            default: 100
+          }
+        },
+        {
+          name: {
+            type: String,
+            default: '目前人数'
+          },
+          value: {
+            type: Number,
+            default: 80
+          }
+        }
+      ]
     }
   },
   data() {
     return {
-      config: {
-        data: [
-          {
-            name: '目前人数',
-            value: 55
-          },
-          {
-            name: '容纳量',
-            value: 120
-          }
-        ]
-      }
+
     }
   },
   methods: {

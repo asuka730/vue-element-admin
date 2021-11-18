@@ -58,7 +58,7 @@ export default {
         title: '123',
         data: data
       }
-      console.log(data)
+      console.log(this.rightDetailData, '???')
     }
   }
 }

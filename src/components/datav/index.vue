@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="right">
-          <rightDetail :right-detail-data="rightDetailData" />
+          <rightDetail :right-detail-data="rightDetailData" :config=" config" />
         </div>
       </div>
     </dv-full-screen-container>
@@ -47,7 +47,8 @@ export default {
   },
   data() {
     return {
-      rightDetailData: null
+      rightDetailData: null,
+      config: null
     }
   },
   mounted() {},
@@ -55,6 +56,7 @@ export default {
     emitEvent(data) {
       console.log('datav 父亲组件数据')
       this.rightDetailData = data
+      console.log(data)
       console.log(this.rightDetailData)
     }
   }
