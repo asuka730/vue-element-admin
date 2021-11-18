@@ -48,7 +48,16 @@ export default {
   data() {
     return {
       rightDetailData: null,
-      config: null
+      config: { data: [
+        {
+          name: '目前人数',
+          value: 80
+        },
+        {
+          name: '容纳量',
+          value: 100
+        }
+      ] }
     }
   },
   mounted() {},

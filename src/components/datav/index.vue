@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="right">
-          <rightDetail :right-detail-data="rightDetailData" :config="config" />
+          <rightDetail :right-detail-data="rightDetailData" :config=" config" />
         </div>
       </div>
     </dv-full-screen-container>

@@ -15,20 +15,24 @@
           style="width: 300px; height: 300px"
         />
         <div class="info-content">
-          <h2>
-            {{ rightDetailData ? rightDetailData.data.data.scenic_name : "" }}
-          </h2>
-          <h2>
-            {{ rightDetailData ? rightDetailData.data.data.address : "" }}
-          </h2>
+          <h2>{{ rightDetailData ? rightDetailData.data.data.scenic_name : "" }}</h2>
+          <h2>{{ rightDetailData ? rightDetailData.data.data.address : "" }}</h2>
         </div>
       </div></dv-border-box-1>
+    <div id="ranking-board">
+      <div class="ranking-board-title">关联度最高top5</div>
+      <dv-scroll-ranking-board :config="rank" />
+    </div>
+    <!--    <ranking-board :ranking="rank" />-->
   </div>
+
 </template>
 
 <script>
+
 export default {
   name: 'RightDetail',
+
   props: {
     // TODO: 右边组件数据
     rightDetailData: {
@@ -50,24 +54,71 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      rank: {
+        data: [
+          {
+            name: '景点1',
+            value: 55
+          },
+          {
+            name: '景点2',
+            value: 90
+          },
+          {
+            name: '景点3',
+            value: 78
+          },
+          {
+            name: '景点4',
+            value: 66
+          },
+          {
+            name: '景点5',
+            value: 80
+          }
+        ],
+        rowNum: 6,
+        waitTime: 3000,
+        unit: '%'
+      }
+    }
   },
   watch: {
-    config() {
-      this.updateHandler()
+    rightDetailData(val) {
+      this.associationList()
     }
+
   },
 
   methods: {
-    updateHandler() {
-      // const { config } = this
-      // this.config = { ...this.config }
+
+    associationList() {
+      const that = this
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/get_association_one', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        type: 'GET',
+        data: {
+          scenic_id: this.rightDetailData.data.data.scenic_id
+        },
+        async: false,
+        success: function(data) {
+          // that.rank['data'] = data.data
+          that.rank = {
+            ...this.rank,
+            data: [...data.data]
+          }
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+#ranking-board{
+  height: 40vh;
+}
 .info {
   display: flex;
   flex-direction: row;
