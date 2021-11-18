@@ -9,7 +9,7 @@
         margin-left: 20px;
       "
     >
-      <a href="#/dash">dash</a>
+      <a href="#/dash">客流监控</a>
     </dv-border-box-5>
     <dv-border-box-5
       style="
@@ -20,7 +20,7 @@
         margin-left: 20px;
       "
     >
-      <a href="#/dash/flow">dashflow</a>
+      <a href="#/dash/flow">客流预测</a>
     </dv-border-box-5>
     <dv-border-box-5
       style="
@@ -31,7 +31,7 @@
         margin-left: 20px;
       "
     >
-      <a href="#/dash/ass">ass</a>
+      <a href="#/dash/ass">景区关联</a>
     </dv-border-box-5>
   </div>
 </template>

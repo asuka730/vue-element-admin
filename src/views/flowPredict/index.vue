@@ -530,9 +530,10 @@ export default {
 }
 #chart {
   position: fixed;
-  left: 220px;
+  left: 8vw;
+  right: 8vw;
   top: 220px;
-  width: 1400px;
+  width: 75vw;
   height: 450px;
   margin: 0 auto;
   text-align: center;
