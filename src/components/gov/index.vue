@@ -66,8 +66,6 @@ export default {
     box-shadow: 0 0 3px blue;
     display: flex;
     flex-direction: column;
-    .main-head {
-    }
     .main-content {
       height: calc(100% - 100px);
       display: flex;

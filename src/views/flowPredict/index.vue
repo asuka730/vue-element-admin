@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <div class="head-tabs">
-      <Tab />
+  <div class="container">
+    <div class="main-head">
+      <top-header />
+      <div class="head-tabs">
+        <Tab />
+      </div>
     </div>
     <div class="Echart">
       <div class="weather">
@@ -28,11 +31,11 @@
 import axios from "axios";
 import Tab from "../../components/Tabs/index.vue";
 require("echarts/extension/bmap/bmap");
-import BaiduMap from "vue-baidu-map/components/map/Map.vue";
 import { loadBMap } from "../../map.js";
+import topHeader from "./topHeader.vue";
 export default {
   name: "FlowPredict",
-  components: { Tab },
+  components: { Tab, topHeader },
   data() {
     return {
       id: 1,
@@ -488,6 +491,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  display: flex;
+  flex-direction: row;
+}
 .head-tabs {
   position: fixed;
   top: 20px;
