@@ -37,6 +37,25 @@ export default {
         waitTime: 3000
       }
     }
+  },
+  created() {
+    this.getRankList()
+  },
+  methods: {
+    getRankList: function() {
+      var that = this
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/get_scenic_rank', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        data: {
+          'time': 1636609435
+        },
+        type: 'POST',
+        async: false,
+        success: function(data) {
+          that.config['data'] = data.data
+        }
+      })
+    }
   }
 }
 </script>

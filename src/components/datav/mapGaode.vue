@@ -23,7 +23,8 @@ export default {
               max: 3326504
             },
             name: '监控点1',
-            coordinates: [121.4878892450119, 31.245320671055552],
+            coordinates: [121.66531839251513, 31.14333151076735],
+
             id: 'point 1'
           },
           {
@@ -39,23 +40,27 @@ export default {
       }
     }
   },
+  created() {
+    this.getCameraList()
+  },
   mounted() {
     const ak = 'ZsOvbi1cUjPTNwsfgpqh0a9wsNMVsdWO'
-    const where = '上海市外滩'
+    const where = '上海市浦东新区川沙镇黄赵路310号'
     fetchJsonp(
       `https://api.map.baidu.com/geocoding/v3/?address=${where}&output=json&ak=${ak}`
     )
       .then((res) => res.json())
       .then((res) => {
+        console.log(res.result.location.lng, res.result.location.lat)
         this.scene = new Scene({
           id: 'map-gaode',
           map: new GaodeMap({
             pitch: 0,
             center: [
-              Number(res.result.location.lng),
-              Number(res.result.location.lat)
+              Number(res.result.location.lng - 0.010),
+              Number(res.result.location.lat - 0.004)
             ],
-            zoom: 12.5,
+            zoom: 16.5,
             style: 'dark' // 样式URL
           })
         })
@@ -83,6 +88,23 @@ export default {
         }
       ]
     },
+
+    getCameraList() {
+      var that = this
+      $.ajax({
+        url: 'http://127.0.0.1:8000/api/get_list', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        data: {
+          'time': 1636609435
+        },
+        type: 'POST',
+        async: false,
+        success: function(data) {
+          console.log(that.pointsData)
+          that.pointsData.nodes = data.data
+          console.log(that.pointsData)
+        }
+      })
+    },
     addChart() {
       const _this = this
       const data = this.pointsData
@@ -90,7 +112,8 @@ export default {
       data.nodes.forEach(function(item) {
         const el = document.createElement('div')
         const total = item.people.max
-        const size = Math.min(parseInt(total / 10000, 10), 150)
+        console.log(total)
+        const size = Math.min(parseInt(total / 5, 10), 150)
         if (size < 30) {
           return
         }
