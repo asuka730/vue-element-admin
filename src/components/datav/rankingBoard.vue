@@ -45,7 +45,7 @@ export default {
     getRankList: function() {
       var that = this
       $.ajax({
-        url: 'http://127.0.0.1:8000/api/get_scenic_rank', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
+        url: 'http://47.100.89.102:8888/api/get_scenic_rank', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
         data: {
           'time': 1636609435
         },

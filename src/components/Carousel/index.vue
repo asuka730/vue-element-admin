@@ -7,14 +7,14 @@
     >
       <a slot="customPaging" slot-scope="props">
         <img :src="getImgUrl(props.i)">
-        {{ cemeras[props.i].name }}
+        <span class="customPaging-text">{{ cemeras[props.i].name }}</span>
       </a>
-      <div v-for="cemera in cemeras" :key="cemera.image.src">
-        <img :src="cemera.image.src">
+      <div v-for="cemera in cemeras" :key="cemera.image">
+        <img :src="cemera.image">
       </div>
     </a-carousel>
     <div style="margin-top: 120px">
-      <SlideRange :max="10" @onChangeIdx="handleIdx" />
+      <SlideRange :max="5" @onChangeIdx="handleIdx" />
     </div>
   </div>
 </template>
@@ -23,46 +23,68 @@ import SlideRange from '../SlideRange'
 
 export default {
   components: { SlideRange },
+  props: {
+    rightDetailData: {
+      default: undefined
+    }
+  },
   data() {
     return {
       cemeras: [
         {
-          image: {
-            src: 'http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_1.jpg_boxed_image.png',
-            createdAt: 'xx'
-          },
-          cemeraid: 'xxx',
-          name: '监控点1-1号监控'
+          image:
+            'http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_1.jpg_boxed_image.png',
+          name: '1号监控'
         },
         {
-          image: {
-            src: 'http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_3.jpg_boxed_image.png',
-            createdAt: 'xx'
-          },
-          cemeraid: 'xxx',
-          name: '监控点1-2号监控'
+          image:
+            'http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_2.jpg_boxed_image.png',
+          name: '2号监控'
+        },
+        {
+          image:
+            'http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_3.jpg_boxed_image.png',
+          name: '3号监控'
+        },
+        {
+          image:
+            'http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_4.jpg_boxed_image.png',
+          name: '4号监控'
         }
       ],
       id: '监控点1',
       idx: 0
     }
   },
+  watch: {
+    rightDetailData(val) {
+      console.log(val, this.idx)
+      this.getCurImage(val.id, this.idx)
+    }
+  },
   methods: {
     getImgUrl(i) {
-      return this.cemeras[i].image.src
+      return this.cemeras[i].image
     },
     handleIdx(i) {
-      console.log(i)
       this.idx = i
     },
-    getCurImage() {
-      // this.cemeras = props.
-
+    getCurImage(id, idx) {
+      const urls = [...this.cemeras]
+      for (let i = 0; i < 4; i++) {
+        const t = i + idx * 4 + id
+        const url = `http://r1xjuvtpx.hd-bkt.clouddn.com/dump/IMG_${t}.jpg_boxed_image.png`
+        urls[i].image = url
+      }
+      this.cemeras = urls
     }
   }
 }
 </script>
 <style scoped>
+.ant-carousel >>> .customPaging-text {
+  color: white;
+}
 .ant-carousel >>> .slick-dots {
   height: auto;
 }

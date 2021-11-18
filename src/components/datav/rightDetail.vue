@@ -14,18 +14,32 @@
           <!--          <h2>{{ rightDetailData ? rightDetailData.coordinates : "" }}</h2>-->
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >当前人数 {{ rightDetailData? rightDetailData.id : "" }}</dv-decoration-7>
+          >当前人数
+            {{
+              rightDetailData ? rightDetailData.current : ""
+            }}</dv-decoration-7>
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >容纳比 {{ rightDetailData? rightDetailData.people.current/rightDetailData.people.max : "" }}</dv-decoration-7>
+          >容纳比
+            {{
+              rightDetailData
+                ? `${Math.floor(
+                  (rightDetailData.people.current /
+                    rightDetailData.people.max) *
+                    100
+                )}%`
+                : ""
+            }}</dv-decoration-7>
           <dv-decoration-7
             style="width: 150px; height: 30px"
-          >最大容纳人数 {{ rightDetailData? rightDetailData.people.max : "" }}</dv-decoration-7>
-
+          >最大容纳人数
+            {{
+              rightDetailData ? rightDetailData.people.max : ""
+            }}</dv-decoration-7>
         </div>
       </div></dv-border-box-1>
 
-    <Carousel />
+    <Carousel :right-detail-data="rightDetailData" />
   </div>
 </template>
 
@@ -40,7 +54,6 @@ export default {
     rightDetailData: {
       default: undefined
     },
-
     config: {
       default: {
         data: [
@@ -57,20 +70,21 @@ export default {
     }
   },
   data() {
-    return {
-    }
+    return {}
   },
   watch: {
-    config: () => {
-      this.updateHandle()
+    config() {
+      this.updateHandler()
     }
   },
 
   methods: {
     updateHandler() {
-      const { config } = this
-      this.config = { ...this.config }
-    } }
+      // const { config } = this
+      // this.config = { ...this.config }
+      // console.log(this.config)
+    }
+  }
 }
 </script>
 

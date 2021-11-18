@@ -39,7 +39,7 @@ export default {
       param.append('username', 1)
       param.append('password', 1) // 这个地方可以传递多个参数
       $.ajax({
-        url: 'http://127.0.0.1:8000/do_login', // 可以通过直接请求的方式
+        url: 'http://47.100.89.102:8888/do_login', // 可以通过直接请求的方式
         type: 'POST',
         // data: param,
         data: {
