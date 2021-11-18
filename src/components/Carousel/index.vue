@@ -58,8 +58,14 @@ export default {
   },
   watch: {
     rightDetailData(val) {
-      console.log(val, this.idx)
       this.getCurImage(val.id, this.idx)
+    },
+    idx(val) {
+      let v = 0
+      if (this.rightDetailData && this.rightDetailData.id) {
+        v = this.rightDetailData.id
+      }
+      this.getCurImage(v, val)
     }
   },
   methods: {
