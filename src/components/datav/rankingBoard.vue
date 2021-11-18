@@ -50,7 +50,7 @@ export default {
           'time': 1636609435
         },
         type: 'POST',
-        async: false,
+        async: true,
         success: function(data) {
           that.config['data'] = data.data
         }

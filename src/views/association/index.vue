@@ -31,7 +31,7 @@ export default {
         data: {
           scenic_id: 1
         },
-        async: false,
+        async: true,
         success: function(data) {
           console.log(data)
         }
@@ -50,7 +50,7 @@ export default {
           'password': 1
         },
         dataType: 'json',
-        async: false,
+        async: true,
         success: function(data) {
           // debugger
           console.log(data)

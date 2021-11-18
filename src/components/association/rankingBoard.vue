@@ -49,7 +49,7 @@ export default {
       $.ajax({
         url: 'http://47.100.89.102:8888/api/most_association', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
         type: 'GET',
-        async: false,
+        async: true,
         success: function(data) {
           console.log(that.config['data'])
           // console.log(data)

@@ -64,7 +64,7 @@ export default {
       $.ajax({
         url: 'http://47.100.89.102:8888/api/get_association_list', // 看vue.config.js 里面有代理转发，上下两种方式的url都可以使用
         type: 'GET',
-        async: false,
+        async: true,
         success: function(data) {
           that.MapData = data
         }
@@ -171,7 +171,7 @@ export default {
         data: {
           scenic_id: scenic_id
         },
-        async: false,
+        async: true,
         success: function(data) {
           that.$emit('fatherEvent', data)
         }
